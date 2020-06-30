@@ -9,7 +9,7 @@ variable "name" {
 variable "application" {
   type        = string
   default     = ""
-  description = "Application (e.g. `cd` or `clouddrove`)."
+  description = "Application (e.g. `aashish`)."
 }
 
 variable "environment" {
@@ -80,8 +80,8 @@ variable "assign_generated_ipv6_cidr_block" {
   description = "Requests an Amazon-provided IPv6 CIDR block with a /56 prefix length for the VPC. You cannot specify the range of IP addresses, or the size of the CIDR block."
 }
 
-#Module      : VPC
-#Description : Terraform VPC module variables.
+#Module      : FLOW LOG
+#Description : Terraform flow log module variables.
 variable "flow_log_enabled" {
   type        = bool
   default     = false
