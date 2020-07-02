@@ -16,28 +16,35 @@ module "labels" {
 #Module      : VPC
 #Description : Terraform module to create VPC resource on AWS.
 resource "aws_vpc" "default" {
-  count = var.enabled ? 1 : 0
+  count = var.enabled ? length(var.cidr_block) : 0
 
-  cidr_block                       = var.cidr_block
+  cidr_block                       = element(var.cidr_block, count.index)
   instance_tenancy                 = var.instance_tenancy
   enable_dns_hostnames             = var.enable_dns_hostnames
   enable_dns_support               = var.enable_dns_support
   enable_classiclink               = var.enable_classiclink
   enable_classiclink_dns_support   = var.enable_classiclink_dns_support
   assign_generated_ipv6_cidr_block = var.assign_generated_ipv6_cidr_block
-  tags                             = module.labels.tags
+  
+  tags   = merge(
+    module.labels.tags,
+    {
+      "Name" = format("%s-%s", module.labels.id, count.index + 1)
+    }
+  )
 }
 
 #Module      : INTERNET GATEWAY
 #Description : Terraform module which creates Internet Gateway resources on AWS.
 resource "aws_internet_gateway" "default" {
-  count = var.enabled ? 1 : 0
+  count = var.enabled ? length(var.cidr_block) : 0
 
-  vpc_id = join("", aws_vpc.default.*.id)
+  vpc_id = element(aws_vpc.default.*.id, count.index)
+  
   tags   = merge(
     module.labels.tags,
     {
-      "Name" = format("%s-igw", module.labels.id)
+      "Name" = format("%s-igw-%s", module.labels.id, count.index + 1)
     }
   )
 }
@@ -46,13 +53,19 @@ resource "aws_internet_gateway" "default" {
 #Description : Provides a VPC/Subnet/ENI Flow Log to capture IP traffic for a
 #              specific network interface, subnet, or VPC. Logs are sent to S3 Bucket.
 resource "aws_flow_log" "vpc_flow_log" {
-  count = var.enabled && var.flow_log_enabled ? 1 : 0
+  count = var.enabled && var.flow_log_enabled ? length(var.cidr_block) : 0
 
   traffic_type             = var.traffic_type
   log_destination_type     = var.log_destination_type
   log_destination          = var.log_destination_arn
-  vpc_id                   = join("", aws_vpc.default.*.id)
+  vpc_id                   = element(aws_vpc.default.*.id, count.index)
   log_format               = var.log_format
   max_aggregation_interval = var.max_aggregation_interval
-  tags                     = module.labels.tags
+  
+  tags   = merge(
+    module.labels.tags,
+    {
+      "Name" = format("%s-flow-log-%s", module.labels.id, count.index + 1)
+    }
+  )
 }
