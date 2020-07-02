@@ -1,5 +1,5 @@
 output "id" {
-  value       = join("", module.vpc.*.vpc_id)
+  value       = module.vpc.vpc_id
   description = "The ID of the VPC."
 }
 
