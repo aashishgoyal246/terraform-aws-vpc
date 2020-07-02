@@ -1,4 +1,6 @@
-output "id" {
+#Module      : VPC
+#Description : Output of resources created on AWS.
+output "vpc_id" {
   value       = module.vpc.vpc_id
   description = "The ID of the VPC."
 }
