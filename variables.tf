@@ -39,8 +39,8 @@ variable "tags" {
 #Module      : VPC
 #Description : Terraform VPC module variables.
 variable "cidr_block" {
-  type        = list
-  default     = []
+  type        = string
+  default     = ""
   description = "CIDR for the VPC."
 }
 

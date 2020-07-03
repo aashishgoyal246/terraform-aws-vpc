@@ -11,6 +11,6 @@ module "vpc" {
   label_order = ["environment", "application", "name"]
 
   enabled                          = true
-  cidr_block                       = ["10.10.0.0/16", "10.20.0.0/16"]
+  cidr_block                       = "10.10.0.0/16"
   assign_generated_ipv6_cidr_block = true
 }
