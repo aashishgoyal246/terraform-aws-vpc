@@ -94,6 +94,12 @@ variable "traffic_type" {
   description = "The type of traffic to capture. Valid values: ACCEPT, REJECT, ALL."
 }
 
+variable "iam_role_arn" {
+  type        = string
+  default     = ""
+  description = "The ARN for the IAM role that's used to post flow logs to a CloudWatch Logs log group."
+}
+
 variable "log_destination_type" {
   type        = string
   default     = ""
@@ -104,12 +110,6 @@ variable "log_destination_arn" {
   type        = string
   default     = ""
   description = "The ARN of the logging destination."
-}
-
-variable "log_format" {
-  type        = string
-  default     = ""
-  description = "The fields to include in the flow log record, in the order in which they should appear."
 }
 
 variable "max_aggregation_interval" {

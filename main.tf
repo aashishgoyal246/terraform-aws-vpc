@@ -3,7 +3,7 @@
 #              for resources. You can use terraform-labels to implement a strict naming
 #              convention.
 module "labels" {
-  source = "git::https://github.com/aashishgoyal246/terraform-labels.git?ref=tags/0.12.0"
+  source = "git::https://github.com/aashishgoyal246/terraform-labels.git?ref=tags/0.13.0"
 
   name        = var.name
   application = var.application
@@ -50,10 +50,10 @@ resource "aws_flow_log" "vpc_flow_log" {
   count = var.enabled && var.flow_log_enabled ? 1 : 0
 
   traffic_type             = var.traffic_type
+  iam_role_arn             = var.iam_role_arn
   log_destination_type     = var.log_destination_type
   log_destination          = var.log_destination_arn
   vpc_id                   = join("", aws_vpc.default.*.id)
-  log_format               = var.log_format
   max_aggregation_interval = var.max_aggregation_interval
   
   tags   = merge(
